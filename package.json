@@ -1,0 +1,35 @@
+{
+  "name": "elasticsearch-rolling-index-name-parser",
+  "version": "1.0.0",
+  "description": "Parser for Elasticsearch rolling index names.",
+  "main": "src/index.js",
+  "scripts": {
+    "ci": "npm run lint && npm run test",
+    "lint": "eslint .",
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Brightspace/elasticsearch-rolling-index-name-parser.git"
+  },
+  "keywords": [
+    "Elasticsearch",
+    "rolling",
+    "parser"
+  ],
+  "author": "Jeff Ashton",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Brightspace/elasticsearch-rolling-index-name-parser/issues"
+  },
+  "homepage": "https://github.com/Brightspace/elasticsearch-rolling-index-name-parser#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^5.13.0",
+    "mocha": "^6.1.4",
+    "moment": "^2.24.0"
+  },
+  "peerDependencies": {
+    "moment": "^2.24.0"
+  }
+}
