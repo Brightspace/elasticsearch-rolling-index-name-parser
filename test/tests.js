@@ -1,7 +1,9 @@
 const chai = require( 'chai' );
 const assert = chai.assert;
 const moment = require( 'moment' );
-const rollingIndexNameParser = require( '../src/index.js' );
+
+const rollingIndexNameParserFactory = require( '../src/index.js' );
+const rollingIndexNameParser = rollingIndexNameParserFactory();
 
 describe( 'elasticsearch-rolling-index-name-parser', function() {
 

@@ -21,34 +21,37 @@ const datePatterns = [
 	}
 ];
 
-module.exports = function( name ) {
+module.exports = function() {
 
-	for( let i = 0; i < datePatterns.length; i++ ) {
+	return function( name ) {
 
-		const datePattern = datePatterns[ i ];
-		const dateRegex = new RegExp( datePattern.regex, 'g' );
+		for( let i = 0; i < datePatterns.length; i++ ) {
 
-		const match = dateRegex.exec( name );
-		if( match ) {
+			const datePattern = datePatterns[ i ];
+			const dateRegex = new RegExp( datePattern.regex, 'g' );
 
-			const name = match[ 1 ];
-			const dateString = match[ 2 ];
+			const match = dateRegex.exec( name );
+			if( match ) {
 
-			const startMoment = moment.utc( dateString, datePattern.format, true );
-			if( !startMoment.isValid() ) {
-				return null;
+				const name = match[ 1 ];
+				const dateString = match[ 2 ];
+
+				const startMoment = moment.utc( dateString, datePattern.format, true );
+				if( !startMoment.isValid() ) {
+					return null;
+				}
+
+				const endMoment = startMoment.clone().endOf( datePattern.endOfUnit );
+
+				return {
+					name,
+					startMoment,
+					endMoment,
+					period: datePattern.period
+				};
 			}
-
-			const endMoment = startMoment.clone().endOf( datePattern.endOfUnit );
-
-			return {
-				name,
-				startMoment,
-				endMoment,
-				period: datePattern.period
-			};
 		}
-	}
 
-	return null;
+		return null;
+	};
 };
