@@ -5,19 +5,28 @@ const datePatterns = [
 		period: 'hourly',
 		format: 'YYYY-MM-DD-HH',
 		regex: '^(.+)-(\\d{4}-\\d{2}-\\d{2}-\\d{2})$',
-		endOfUnit: 'hour'
+		endOfCalculator: start => start.clone().endOf( 'hour' )
 	},
 	{
 		period: 'daily',
 		format: 'YYYY-MM-DD',
 		regex: '^(.+)-(\\d{4}-\\d{2}-\\d{2})$',
-		endOfUnit: 'day'
+		endOfCalculator: start => start.clone().endOf( 'day' )
+	},
+	{
+		period: 'weekly',
+		format: [
+			'GGGG-[w]WW',
+			'GGGG-[W]WW'
+		],
+		regex: '^(.+)-(\\d{4}-[wW]\\d{2})$',
+		endOfCalculator: start => start.clone().endOf( 'day' ).add( 6, 'day' )
 	},
 	{
 		period: 'monthly',
 		format: 'YYYY-MM',
 		regex: '^(.+)-(\\d{4}-\\d{2})$',
-		endOfUnit: 'month'
+		endOfCalculator: start => start.clone().endOf( 'month' )
 	}
 ];
 
@@ -41,7 +50,7 @@ module.exports = function() {
 					return null;
 				}
 
-				const endMoment = startMoment.clone().endOf( datePattern.endOfUnit );
+				const endMoment = datePattern.endOfCalculator( startMoment );
 
 				return {
 					name,
