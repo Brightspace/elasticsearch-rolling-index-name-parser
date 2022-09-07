@@ -100,7 +100,7 @@ describe( 'elasticsearch-rolling-index-name-parser', function() {
 			assert.equal( result.endMoment.toISOString(), '2009-01-04T23:59:59.999Z', 'should construct correct end moment' );
 		} );
 
-		it( 'should start from Jan 1', function() {
+		it( 'should start from Jan 4', function() {
 
 			const result = rollingIndexNameParser( 'weekly_logs-2022-W01' );
 			assert( result, 'should parse index name' );
