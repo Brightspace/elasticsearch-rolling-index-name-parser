@@ -1,37 +1,34 @@
 const moment = require( 'moment' );
 const parsingLocale = 'en';
 
-const datePatterns = [
-	{
-		period: 'hourly',
-		format: 'YYYY-MM-DD-HH',
-		regex: '^(.+)-(\\d{4}-\\d{2}-\\d{2}-\\d{2})$',
-		endOfCalculator: start => start.clone().endOf( 'hour' )
-	},
-	{
-		period: 'daily',
-		format: 'YYYY-MM-DD',
-		regex: '^(.+)-(\\d{4}-\\d{2}-\\d{2})$',
-		endOfCalculator: start => start.clone().endOf( 'day' )
-	},
-	{
-		period: 'weekly',
-		format: [
-			'gggg-[w]ww',
-			'gggg-[W]ww'
-		],
-		regex: '^(.+)-(\\d{4}-[wW]\\d{2})$',
-		endOfCalculator: start => start.clone().endOf( 'day' ).add( 6, 'day' )
-	},
-	{
-		period: 'monthly',
-		format: 'YYYY-MM',
-		regex: '^(.+)-(\\d{4}-\\d{2})$',
-		endOfCalculator: start => start.clone().endOf( 'month' )
-	}
-];
+module.exports = function(options) {
 
-module.exports = function() {
+	const datePatterns = [
+		{
+			period: 'hourly',
+			format: 'YYYY-MM-DD-HH',
+			regex: '^(.+)-(\\d{4}-\\d{2}-\\d{2}-\\d{2})$',
+			endOfCalculator: start => start.clone().endOf( 'hour' )
+		},
+		{
+			period: 'daily',
+			format: 'YYYY-MM-DD',
+			regex: '^(.+)-(\\d{4}-\\d{2}-\\d{2})$',
+			endOfCalculator: start => start.clone().endOf( 'day' )
+		},
+		{
+			period: 'weekly',
+			format: options && options.usLocaleWeeks ? ['gggg-[w]ww', 'gggg-[W]ww'] : ['GGGG-[w]WW', 'GGGG-[W]WW'],
+			regex: '^(.+)-(\\d{4}-[wW]\\d{2})$',
+			endOfCalculator: start => start.clone().endOf( 'day' ).add( 6, 'day' )
+		},
+		{
+			period: 'monthly',
+			format: 'YYYY-MM',
+			regex: '^(.+)-(\\d{4}-\\d{2})$',
+			endOfCalculator: start => start.clone().endOf( 'month' )
+		}
+	];
 
 	return function( name ) {
 

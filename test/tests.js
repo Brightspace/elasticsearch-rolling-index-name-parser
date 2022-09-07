@@ -4,6 +4,7 @@ const moment = require( 'moment' );
 
 const rollingIndexNameParserFactory = require( '../src/index.js' );
 const rollingIndexNameParser = rollingIndexNameParserFactory();
+const rollingIndexNameParserLocaleWeeks = rollingIndexNameParserFactory({usLocaleWeeks: true});
 
 describe( 'elasticsearch-rolling-index-name-parser', function() {
 
@@ -52,11 +53,75 @@ describe( 'elasticsearch-rolling-index-name-parser', function() {
 		assert.equal( result.endMoment.toISOString(), '2018-04-30T23:59:59.999Z', 'should construct correct end moment' );
 	} );
 
-	describe( 'when weekly pattern', function() {
+	describe( 'when iso weekly pattern', function() {
 
 		it( 'should parse lowercase w', function() {
 
 			const result = rollingIndexNameParser( 'super_logs-2019-w33' );
+			assert( result, 'should parse index name' );
+	
+			assert.equal( result.name, 'super_logs', 'name should be part before the date' );
+			assert.equal( result.period, 'weekly', 'period should be weekly' );
+	
+			assert( moment.isMoment( result.startMoment ), 'start moment should be a moment' );
+			assert.equal( result.startMoment.toISOString(), '2019-08-12T00:00:00.000Z', 'should parse correct start moment' );
+			
+			assert( moment.isMoment( result.endMoment ), 'end moment should be a moment' );
+			assert.equal( result.endMoment.toISOString(), '2019-08-18T23:59:59.999Z', 'should construct correct end moment' );
+		} );
+
+		it( 'should parse uppercase W', function() {
+
+			const result = rollingIndexNameParser( 'super_logs-2019-W33' );
+			assert( result, 'should parse index name' );
+	
+			assert.equal( result.name, 'super_logs', 'name should be part before the date' );
+			assert.equal( result.period, 'weekly', 'period should be weekly' );
+	
+			assert( moment.isMoment( result.startMoment ), 'start moment should be a moment' );
+			assert.equal( result.startMoment.toISOString(), '2019-08-12T00:00:00.000Z', 'should parse correct start moment' );
+			
+			assert( moment.isMoment( result.endMoment ), 'end moment should be a moment' );
+			assert.equal( result.endMoment.toISOString(), '2019-08-18T23:59:59.999Z', 'should construct correct end moment' );
+		} );
+
+		it( 'should parse week of year rules correctly', function() {
+
+			const result = rollingIndexNameParser( 'weekly_logs-2009-W01' );
+			assert( result, 'should parse index name' );
+	
+			assert.equal( result.name, 'weekly_logs', 'name should be part before the date' );
+			assert.equal( result.period, 'weekly', 'period should be weekly' );
+	
+			assert( moment.isMoment( result.startMoment ), 'start moment should be a moment' );
+			assert.equal( result.startMoment.toISOString(), '2008-12-29T00:00:00.000Z', 'should parse correct start moment' );
+			
+			assert( moment.isMoment( result.endMoment ), 'end moment should be a moment' );
+			assert.equal( result.endMoment.toISOString(), '2009-01-04T23:59:59.999Z', 'should construct correct end moment' );
+		} );
+
+		it( 'should start from Jan 1', function() {
+
+			const result = rollingIndexNameParser( 'weekly_logs-2022-W01' );
+			assert( result, 'should parse index name' );
+
+			assert.equal( result.name, 'weekly_logs', 'name should be part before the date' );
+			assert.equal( result.period, 'weekly', 'period should be weekly' );
+
+			assert( moment.isMoment( result.startMoment ), 'start moment should be a moment' );
+			assert.equal( result.startMoment.toISOString(), '2022-01-03T00:00:00.000Z', 'should parse correct start moment' );
+
+			assert( moment.isMoment( result.endMoment ), 'end moment should be a moment' );
+			assert.equal( result.endMoment.toISOString(), '2022-01-09T23:59:59.999Z', 'should construct correct end moment' );
+		} );
+
+	} );
+
+	describe( 'when us locale weekly pattern', function() {
+
+		it( 'should parse lowercase w', function() {
+
+			const result = rollingIndexNameParserLocaleWeeks( 'super_logs-2019-w33' );
 			assert( result, 'should parse index name' );
 	
 			assert.equal( result.name, 'super_logs', 'name should be part before the date' );
@@ -71,7 +136,7 @@ describe( 'elasticsearch-rolling-index-name-parser', function() {
 
 		it( 'should parse uppercase W', function() {
 
-			const result = rollingIndexNameParser( 'super_logs-2019-W33' );
+			const result = rollingIndexNameParserLocaleWeeks( 'super_logs-2019-W33' );
 			assert( result, 'should parse index name' );
 	
 			assert.equal( result.name, 'super_logs', 'name should be part before the date' );
@@ -86,7 +151,7 @@ describe( 'elasticsearch-rolling-index-name-parser', function() {
 
 		it( 'should parse week of year rules correctly', function() {
 
-			const result = rollingIndexNameParser( 'weekly_logs-2009-W01' );
+			const result = rollingIndexNameParserLocaleWeeks( 'weekly_logs-2009-W01' );
 			assert( result, 'should parse index name' );
 	
 			assert.equal( result.name, 'weekly_logs', 'name should be part before the date' );
@@ -101,7 +166,7 @@ describe( 'elasticsearch-rolling-index-name-parser', function() {
 
 		it( 'should start from Jan 1', function() {
 
-			const result = rollingIndexNameParser( 'weekly_logs-2022-W01' );
+			const result = rollingIndexNameParserLocaleWeeks( 'weekly_logs-2022-W01' );
 			assert( result, 'should parse index name' );
 
 			assert.equal( result.name, 'weekly_logs', 'name should be part before the date' );
