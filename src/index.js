@@ -1,4 +1,5 @@
 const moment = require( 'moment' );
+const parsingLocale = 'en';
 
 const datePatterns = [
 	{
@@ -45,7 +46,7 @@ module.exports = function() {
 				const name = match[ 1 ];
 				const dateString = match[ 2 ];
 
-				const startMoment = moment.utc( dateString, datePattern.format, true );
+				const startMoment = moment.utc( dateString, datePattern.format, parsingLocale, true );
 				if( !startMoment.isValid() ) {
 					return null;
 				}
