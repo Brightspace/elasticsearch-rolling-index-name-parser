@@ -16,8 +16,8 @@ const datePatterns = [
 	{
 		period: 'weekly',
 		format: [
-			'GGGG-[w]WW',
-			'GGGG-[W]WW'
+			'gggg-[w]ww',
+			'gggg-[W]ww'
 		],
 		regex: '^(.+)-(\\d{4}-[wW]\\d{2})$',
 		endOfCalculator: start => start.clone().endOf( 'day' ).add( 6, 'day' )

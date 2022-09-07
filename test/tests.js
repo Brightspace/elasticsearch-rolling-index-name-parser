@@ -63,10 +63,10 @@ describe( 'elasticsearch-rolling-index-name-parser', function() {
 			assert.equal( result.period, 'weekly', 'period should be weekly' );
 	
 			assert( moment.isMoment( result.startMoment ), 'start moment should be a moment' );
-			assert.equal( result.startMoment.toISOString(), '2019-08-12T00:00:00.000Z', 'should parse correct start moment' );
+			assert.equal( result.startMoment.toISOString(), '2019-08-11T00:00:00.000Z', 'should parse correct start moment' );
 			
 			assert( moment.isMoment( result.endMoment ), 'end moment should be a moment' );
-			assert.equal( result.endMoment.toISOString(), '2019-08-18T23:59:59.999Z', 'should construct correct end moment' );
+			assert.equal( result.endMoment.toISOString(), '2019-08-17T23:59:59.999Z', 'should construct correct end moment' );
 		} );
 
 		it( 'should parse uppercase W', function() {
@@ -78,10 +78,10 @@ describe( 'elasticsearch-rolling-index-name-parser', function() {
 			assert.equal( result.period, 'weekly', 'period should be weekly' );
 	
 			assert( moment.isMoment( result.startMoment ), 'start moment should be a moment' );
-			assert.equal( result.startMoment.toISOString(), '2019-08-12T00:00:00.000Z', 'should parse correct start moment' );
+			assert.equal( result.startMoment.toISOString(), '2019-08-11T00:00:00.000Z', 'should parse correct start moment' );
 			
 			assert( moment.isMoment( result.endMoment ), 'end moment should be a moment' );
-			assert.equal( result.endMoment.toISOString(), '2019-08-18T23:59:59.999Z', 'should construct correct end moment' );
+			assert.equal( result.endMoment.toISOString(), '2019-08-17T23:59:59.999Z', 'should construct correct end moment' );
 		} );
 
 		it( 'should parse week of year rules correctly', function() {
@@ -93,10 +93,25 @@ describe( 'elasticsearch-rolling-index-name-parser', function() {
 			assert.equal( result.period, 'weekly', 'period should be weekly' );
 	
 			assert( moment.isMoment( result.startMoment ), 'start moment should be a moment' );
-			assert.equal( result.startMoment.toISOString(), '2008-12-29T00:00:00.000Z', 'should parse correct start moment' );
+			assert.equal( result.startMoment.toISOString(), '2008-12-28T00:00:00.000Z', 'should parse correct start moment' );
 			
 			assert( moment.isMoment( result.endMoment ), 'end moment should be a moment' );
-			assert.equal( result.endMoment.toISOString(), '2009-01-04T23:59:59.999Z', 'should construct correct end moment' );
+			assert.equal( result.endMoment.toISOString(), '2009-01-03T23:59:59.999Z', 'should construct correct end moment' );
+		} );
+
+		it( 'should start from Jan 1', function() {
+
+			const result = rollingIndexNameParser( 'weekly_logs-2022-W01' );
+			assert( result, 'should parse index name' );
+
+			assert.equal( result.name, 'weekly_logs', 'name should be part before the date' );
+			assert.equal( result.period, 'weekly', 'period should be weekly' );
+
+			assert( moment.isMoment( result.startMoment ), 'start moment should be a moment' );
+			assert.equal( result.startMoment.toISOString(), '2021-12-26T00:00:00.000Z', 'should parse correct start moment' );
+
+			assert( moment.isMoment( result.endMoment ), 'end moment should be a moment' );
+			assert.equal( result.endMoment.toISOString(), '2022-01-01T23:59:59.999Z', 'should construct correct end moment' );
 		} );
 
 	} );
